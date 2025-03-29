@@ -1,8 +1,2 @@
-# Игнорируем все директории в корне
+# Ignore all directories in the root  
 /*/
-
-# Но НЕ игнорируем эти файлы
-!.gitignore
-!Makefile
-!docker-compose.yml
-!README.md
