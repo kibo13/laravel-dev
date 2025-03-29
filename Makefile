@@ -10,10 +10,10 @@ NAME ?= laravel
 sail-new:
 	docker compose run --rm laravel composer create-project --prefer-dist laravel/laravel $(NAME)
 
-# Open a shell inside the container
-sail-shell:
+# Open a shell inside the container (optionally run Sail installation)
+sail-sh:
 	@if [ -z "$(NAME)" ]; then \
-		echo "❌ Project name is required. Use: make sail-shell name=your_project"; \
+		echo "❌ Project name is required. Use: make sail-sh name=your_project [install=1]"; \
 		exit 1; \
 	fi
-	docker run --rm -it -v $(PWD)/$(NAME):$(CONTAINER_PATH) -w $(CONTAINER_PATH) $(DOCKER_IMAGE) bash
+	docker run --rm -it -v $(PWD)/$(NAME):$(CONTAINER_PATH) -w $(CONTAINER_PATH) $(DOCKER_IMAGE) bash -c "$(if $(install),php artisan sail:install &&) bash"
