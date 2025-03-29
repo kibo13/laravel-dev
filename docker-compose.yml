@@ -1,8 +1,6 @@
 services:
   laravel:
-    image: composer:latest
-    container_name: laravel-composer
+    image: ${DOCKER_IMAGE}
     volumes:
-      - ./:/app
-    working_dir: /app
-    entrypoint: ["composer"]
+      - ${WORKDIR}:${CONTAINER_PATH}
+    working_dir: ${CONTAINER_PATH}
