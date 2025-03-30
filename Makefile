@@ -9,6 +9,7 @@ NAME ?= laravel
 # Create a new Laravel project
 sail-new:
 	docker compose run --rm laravel composer create-project --prefer-dist laravel/laravel $(NAME)
+	@echo "✅ Laravel project $(NAME) created successfully!"
 
 # Add WWWUSER and WWWGROUP to the .env of a specific project
 sail-env:
@@ -26,7 +27,7 @@ sail-env:
 	@if ! grep -q "^WWWUSER=" $(name)/.env; then echo "\nWWWUSER=$(shell id -u)" >> $(name)/.env; fi
 	@if ! grep -q "^WWWGROUP=" $(name)/.env; then echo "WWWGROUP=$(shell id -g)" >> $(name)/.env; fi
 	@echo "✅ Added WWWUSER and WWWGROUP to $(name)/.env!"
-	
+
 # Open a shell inside the container (optionally run Sail installation)
 sail-sh:
 	@if [ -z "$(NAME)" ]; then \
@@ -34,3 +35,4 @@ sail-sh:
 		exit 1; \
 	fi
 	docker run --rm -it -v $(PWD)/$(NAME):$(CONTAINER_PATH) -w $(CONTAINER_PATH) $(DOCKER_IMAGE) bash -c "$(if $(install),php artisan sail:install &&) bash"
+	@echo "✅ Opened shell inside $(NAME) container."
