@@ -10,6 +10,23 @@ NAME ?= laravel
 sail-new:
 	docker compose run --rm laravel composer create-project --prefer-dist laravel/laravel $(NAME)
 
+# Add WWWUSER and WWWGROUP to the .env of a specific project
+sail-env:
+	@if [ -z "$(name)" ]; then \
+		echo "❌ Project name is required. Use: make sail-env name=your_project"; \
+		exit 1; \
+	fi
+	@if [ ! -f "$(name)/.env" ]; then \
+		echo "❌ .env file not found in $(name)! Run 'cp $(name)/.env.example $(name)/.env' first."; \
+		exit 1; \
+	fi
+	@if [ -s "$(name)/.env" ] && [ "$$(tail -c 1 $(name)/.env)" != "" ]; then \
+		echo "" >> "$(name)/.env"; \
+	fi
+	@if ! grep -q "^WWWUSER=" $(name)/.env; then echo "\nWWWUSER=$(shell id -u)" >> $(name)/.env; fi
+	@if ! grep -q "^WWWGROUP=" $(name)/.env; then echo "WWWGROUP=$(shell id -g)" >> $(name)/.env; fi
+	@echo "✅ Added WWWUSER and WWWGROUP to $(name)/.env!"
+	
 # Open a shell inside the container (optionally run Sail installation)
 sail-sh:
 	@if [ -z "$(NAME)" ]; then \
