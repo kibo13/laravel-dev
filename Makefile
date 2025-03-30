@@ -45,3 +45,10 @@ sail-sh:
 	fi
 	docker run --rm -it -v $(PWD)/$(NAME):$(CONTAINER_PATH) -w $(CONTAINER_PATH) $(DOCKER_IMAGE) bash
 	@echo "✅ Opened shell inside $(NAME) container."
+
+# Initialize a Laravel project (run sail-new, sail-env, sail-install sequentially)
+sail-init:
+	@$(MAKE) sail-new name=$(NAME)
+	@$(MAKE) sail-env name=$(NAME)
+	@$(MAKE) sail-install name=$(NAME)
+	@echo "✅ Laravel project $(NAME) fully initialized!"
