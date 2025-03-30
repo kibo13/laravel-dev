@@ -9,3 +9,6 @@ CONTAINER_PATH=/app
 
 # Docker image with PHP and Composer
 DOCKER_IMAGE=laravelsail/php82-composer
+
+# List of services to be installed with Sail
+SAIL_SERVICES=mysql,redis

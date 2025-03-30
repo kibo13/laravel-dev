@@ -28,11 +28,20 @@ sail-env:
 	@if ! grep -q "^WWWGROUP=" $(name)/.env; then echo "WWWGROUP=$(shell id -g)" >> $(name)/.env; fi
 	@echo "✅ Added WWWUSER and WWWGROUP to $(name)/.env!"
 
-# Open a shell inside the container (optionally run Sail installation)
-sail-sh:
+# Install Sail with predefined services and exit after installation
+sail-install:
 	@if [ -z "$(NAME)" ]; then \
-		echo "❌ Project name is required. Use: make sail-sh name=your_project [install=1]"; \
+		echo "❌ Project name is required. Use: make sail-install name=your_project"; \
 		exit 1; \
 	fi
-	docker run --rm -it -v $(PWD)/$(NAME):$(CONTAINER_PATH) -w $(CONTAINER_PATH) $(DOCKER_IMAGE) bash -c "$(if $(install),php artisan sail:install &&) bash"
+	docker run --rm -i -v $(PWD)/$(NAME):$(CONTAINER_PATH) -w $(CONTAINER_PATH) $(DOCKER_IMAGE) bash -c "php artisan sail:install --no-interaction --with=$(SAIL_SERVICES)"
+	@echo "✅ Sail installed with services: $(SAIL_SERVICES)."
+
+# Open a shell inside the container
+sail-sh:
+	@if [ -z "$(NAME)" ]; then \
+		echo "❌ Project name is required. Use: make sail-sh name=your_project"; \
+		exit 1; \
+	fi
+	docker run --rm -it -v $(PWD)/$(NAME):$(CONTAINER_PATH) -w $(CONTAINER_PATH) $(DOCKER_IMAGE) bash
 	@echo "✅ Opened shell inside $(NAME) container."
