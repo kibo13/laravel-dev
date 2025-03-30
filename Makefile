@@ -30,21 +30,21 @@ sail-env:
 
 # Install Sail with predefined services and exit after installation
 sail-install:
-	@if [ -z "$(NAME)" ]; then \
+	@if [ -z "$(name)" ]; then \
 		echo "❌ Project name is required. Use: make sail-install name=your_project"; \
 		exit 1; \
 	fi
-	docker run --rm -i -v $(PWD)/$(NAME):$(CONTAINER_PATH) -w $(CONTAINER_PATH) $(DOCKER_IMAGE) bash -c "php artisan sail:install --no-interaction --with=$(SAIL_SERVICES)"
+	docker run --rm -i -v $(PWD)/$(name):$(CONTAINER_PATH) -w $(CONTAINER_PATH) $(DOCKER_IMAGE) bash -c "php artisan sail:install --no-interaction --with=$(SAIL_SERVICES)"
 	@echo "✅ Sail installed with services: $(SAIL_SERVICES)."
 
 # Open a shell inside the container
 sail-sh:
-	@if [ -z "$(NAME)" ]; then \
+	@if [ -z "$(name)" ]; then \
 		echo "❌ Project name is required. Use: make sail-sh name=your_project"; \
 		exit 1; \
 	fi
-	docker run --rm -it -v $(PWD)/$(NAME):$(CONTAINER_PATH) -w $(CONTAINER_PATH) $(DOCKER_IMAGE) bash
-	@echo "✅ Opened shell inside $(NAME) container."
+	docker run --rm -it -v $(PWD)/$(name):$(CONTAINER_PATH) -w $(CONTAINER_PATH) $(DOCKER_IMAGE) bash
+	@echo "✅ Opened shell inside $(name) container."
 
 # Initialize a Laravel project (run sail-new, sail-env, sail-install sequentially)
 sail-init:
